@@ -1,21 +1,21 @@
 package de.spezipaul.knockit.kitts;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public abstract class KittDescription implements Listener {
-	
+public class KittDescription implements Listener {
+
+	private KittType kittType;
 	private String name;
 	private String[] description;
 	private ItemStack GUIItem;
-	private HashMap<Integer, ItemStack> items;
 	
-	public KittDescription(String name, String[] description, Material GUIItemMaterial, HashMap<Integer, ItemStack> items) {
+	public KittDescription(KittType type, String name, String[] description, Material GUIItemMaterial) {
+		this.kittType = type;
 		this.name = name;
 		this.description = description;
 		this.GUIItem = new ItemStack(GUIItemMaterial);
@@ -23,7 +23,14 @@ public abstract class KittDescription implements Listener {
 		meta.setDisplayName("§a" + name);
 		meta.setLore(Arrays.asList("§c" + description));
 		this.GUIItem.setItemMeta(meta);
-		this.items = items;
+	}
+	
+	public KittType getKittType() {
+		return kittType;
+	}
+	
+	public void setKittType(KittType kittType) {
+		this.kittType = kittType;
 	}
 	
 	public String getName() {
@@ -48,14 +55,6 @@ public abstract class KittDescription implements Listener {
 
 	public void setGUIItem(ItemStack gUIItem) {
 		GUIItem = gUIItem;
-	}
-
-	public HashMap<Integer, ItemStack> getItems() {
-		return items;
-	}
-
-	public void setItems(HashMap<Integer, ItemStack> items) {
-		this.items = items;
 	}
 
 }

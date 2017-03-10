@@ -22,16 +22,18 @@ public class ClassChooser implements Listener {
 	private Player owner;
 	private Inventory inv;
 	private boolean hasSelected = false;
-	private HashMap<KittDescription, ItemStack> items = new HashMap<>();
+	private HashMap<ItemStack, KittDescription> items = new HashMap<>();
 	
 	public ClassChooser(Player p) {
 		Core.instance.registerEvents(this);
 		this.owner = p;
-		int x = Core.kittsManager.getKitts().size();
+		int x = Core.kittsManager.getKittDescriptions().size();
 		x = ((x + 8) / 9) * 9;
 		this.inv = Core.instance.getServer().createInventory(null, x, "§aWähle eine Klasse");
-		for(KittDescription desc : Core.kittsManager.getKitts()){
-			
+		for(KittDescription desc : Core.kittsManager.getKittDescriptions()){
+			ItemStack item = desc.getGUIItem();
+			items.put(item, desc);
+			inv.addItem(item);
 		}
 		p.openInventory(inv);
 		p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 1, 1);
@@ -41,21 +43,20 @@ public class ClassChooser implements Listener {
 	public void onSelectKit(InventoryClickEvent e){
 		if(e.getInventory().equals(inv) && e.getWhoClicked().equals(owner) && e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR) && !hasSelected){
 			e.setCancelled(true);
-			setItems(e.getCurrentItem());
+			setItems(items.get(e.getCurrentItem()));
 			owner.closeInventory();
 			owner.playSound(owner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
 			hasSelected = true;
 		}
 	}
 	
-	public void setItems(ItemStack item){
-		String name = item.getItemMeta().getDisplayName();
-		Kitt kitt = Core.kittsManager.getkit
+	public void setItems(KittDescription desc){
 		owner.getInventory().clear();
-		for(Entry<Integer, ItemStack> entry : kitt.getItems().entrySet()){
-			owner.getInventory().setItem(entry.getKey(), entry.getValue());
+		Kitt kitt = Core.kittsManager.create(owner, desc);
+		HashMap<Integer, ItemStack> items = kitt.getItems();
+		for(Entry<Integer, ItemStack> ent : items.entrySet()){
+			owner.getInventory().setItem(ent.getKey(), ent.getValue());
 		}
-		Core.kittsManager.setPlayer(owner, kitt);
 	}
 	
 	@EventHandler
