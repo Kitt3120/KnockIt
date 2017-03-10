@@ -12,8 +12,9 @@ import de.spezipaul.knockit.objects.Enchant;
 
 public class ItemUtils {
 	
-	public static ItemStack create(Material material, String name, String[] lore, List<Enchant> enchants){
+	public static ItemStack create(Material material, int amount, String name, String[] lore, List<Enchant> enchants){
 		ItemStack item = new ItemStack(material);
+		item.setAmount(amount);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		meta.setLore(Arrays.asList(lore));
@@ -27,7 +28,7 @@ public class ItemUtils {
 	}
 	
 	public static ItemStack stick(){
-		return create(Material.STICK, "§cKnüppel", new String[]{"§8§m-------------------", "§e§lSchlag sie Runter", "§8§m-------------------"}, Arrays.asList(new Enchant(Enchantment.KNOCKBACK, 2, true)));
+		return create(Material.STICK, 1, "§cKnüppel", new String[]{"§8§m-------------------", "§e§lSchlag sie Runter", "§8§m-------------------"}, Arrays.asList(new Enchant(Enchantment.KNOCKBACK, 2, true)));
 	}
 
 }
