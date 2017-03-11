@@ -26,7 +26,7 @@ public class KittsManager {
 	
 	public KittsManager() {
 		availableKitts.add(new KittDescription(KittType.Teleporter, "Teleporter", new String[]{"Kann sich zurück teleportieren"}, Material.BLAZE_ROD));
-		availableKitts.add(new KittDescription(KittType.Schütze, "Schütze", new String[]{"Einen starken Bogen und 4 Pfeile"}, Material.BOW));
+		availableKitts.add(new KittDescription(KittType.Schütze, "Schütze", new String[]{"Hat 4 Pfeile und einen starken Bogen"}, Material.BOW));
 	}
 	
 	public void register(KittDescription desc){
