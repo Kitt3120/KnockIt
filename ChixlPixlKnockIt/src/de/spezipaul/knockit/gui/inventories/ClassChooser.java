@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -43,10 +44,10 @@ public class ClassChooser implements Listener {
 	public void onSelectKit(InventoryClickEvent e){
 		if(e.getInventory().equals(inv) && e.getWhoClicked().equals(owner) && e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR) && !hasSelected){
 			e.setCancelled(true);
+			hasSelected = true;
 			setItems(items.get(e.getCurrentItem()));
 			owner.closeInventory();
 			owner.playSound(owner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
-			hasSelected = true;
 		}
 	}
 	
@@ -62,6 +63,13 @@ public class ClassChooser implements Listener {
 	@EventHandler
 	public void onCloseInventory(InventoryCloseEvent e){
 		if(e.getInventory().equals(inv) && e.getPlayer().equals(owner) && !hasSelected){
+			owner.openInventory(inv);
+		}
+	}
+	
+	@EventHandler
+	public void onMove(PlayerMoveEvent e){
+		if(e.getPlayer().equals(owner) && e.getPlayer().getOpenInventory() == null && !hasSelected) {
 			owner.openInventory(inv);
 		}
 	}

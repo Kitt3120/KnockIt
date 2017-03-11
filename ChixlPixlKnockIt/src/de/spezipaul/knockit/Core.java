@@ -5,6 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.spezipaul.knockit.events.FallDownEvent;
+import de.spezipaul.knockit.events.JoinOpenClassChooser;
 import de.spezipaul.knockit.managers.KillStreakManager;
 import de.spezipaul.knockit.managers.KittsManager;
 
@@ -18,13 +20,24 @@ public class Core extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		instance = this;
-		kittsManager = new KittsManager(); //Lel easteregg
-		killstreakManager = new KillStreakManager();
-
+		
+		initiateManagers();
+		registerEvents();
+		
 		initConfig();
 	}
+
+	private void initiateManagers() {
+		instance = this;
+		kittsManager = new KittsManager(); //Lel easteregg
+		killstreakManager = new KillStreakManager();		
+	}
 	
+	private void registerEvents() {
+		new FallDownEvent();
+		new JoinOpenClassChooser();
+	}
+
 	@Override
 	public void onDisable() {}
 	

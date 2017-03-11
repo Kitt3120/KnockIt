@@ -29,32 +29,16 @@ public class KittDescription implements Listener {
 		return kittType;
 	}
 	
-	public void setKittType(KittType kittType) {
-		this.kittType = kittType;
-	}
-	
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String[] getDescription() {
 		return description;
 	}
 
-	public void setDescription(String[] description) {
-		this.description = description;
-	}
-
 	public ItemStack getGUIItem() {
 		return GUIItem;
-	}
-
-	public void setGUIItem(ItemStack gUIItem) {
-		GUIItem = gUIItem;
 	}
 
 }

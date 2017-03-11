@@ -21,18 +21,6 @@ public class Schütze extends Kitt {
 	}
 
 	@Override
-	public void setupSchedulers() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void startSchedulers() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void stopSchedulers() {
 		// TODO Auto-generated method stub
 		

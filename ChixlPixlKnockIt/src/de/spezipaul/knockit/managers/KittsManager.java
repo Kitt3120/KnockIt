@@ -72,6 +72,8 @@ public class KittsManager {
 	
 	public void removePlayer(Player player){
 		getKitt(player).stopSchedulers();
+		getKitt(player).setEnabled(false);
+		player.getInventory().clear();
 		activeKitts.remove(player);
 	}
 	
@@ -84,7 +86,6 @@ public class KittsManager {
 	}
 
 	public void onFall(Player p) {
-		p.getInventory().clear();
 		p.setFallDistance(0);
 		p.teleport(p.getLocation().getWorld().getSpawnLocation());
 		Core.killstreakManager.reset(p);
