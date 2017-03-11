@@ -1,4 +1,4 @@
-package de.spezipaul.knockit.kitts.kitts;
+package de.spezipaul.knockit.kitts.kitts.teleporter;
 
 import java.util.HashMap;
 
@@ -55,6 +55,7 @@ public class Teleporter extends Kitt implements Listener {
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
+		if(!isEnabled()) return;
 		if(e.getPlayer().equals(getOwner()) && !getOwner().getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.AIR)){
 			lastGroundLocation = getOwner().getLocation().add(0, 1, 0);
 		}
@@ -62,23 +63,29 @@ public class Teleporter extends Kitt implements Listener {
 	
 	@EventHandler
 	public void onInteractItem(PlayerInteractEvent e){
+		if(!isEnabled()) return;
 		if(e.getPlayer().equals(getOwner()) && e.getItem() != null){
 			ItemStack item = e.getItem();
 			if(item.equals(teleporter)){
-				if(lastGroundLocation != null){
-					getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
-					getOwner().teleport(lastGroundLocation);
-					getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
-					getOwner().getInventory().removeItem(teleporter);
-					teleporterSchedulerActive = true;
-					teleporterScheduler = Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
-						public void run() {
-							getOwner().getInventory().addItem(teleporter);
-							teleporterSchedulerActive = false;
-						}
-					}, teleporterCooldown*20L);
-				}
+				teleport();
 			}
+		}
+	}
+	
+	private void teleport(){
+		if(lastGroundLocation != null){
+			getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
+			getOwner().teleport(lastGroundLocation);
+			getOwner().setFallDistance(0F);
+			getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
+			getOwner().getInventory().removeItem(teleporter);
+			teleporterSchedulerActive = true;
+			teleporterScheduler = Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
+				public void run() {
+					getOwner().getInventory().addItem(teleporter);
+					teleporterSchedulerActive = false;
+				}
+			}, teleporterCooldown*20L);
 		}
 	}
 

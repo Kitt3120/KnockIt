@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import de.spezipaul.knockit.Core;
+
 public class KillStreakManager implements Listener {
 	
 	private HashMap<Player, Integer> currentStreaks = new HashMap<>();
@@ -16,6 +18,12 @@ public class KillStreakManager implements Listener {
 		currentAmount += amount;
 		if(currentAmount < 0) currentAmount = 0;
 		set(p, currentAmount);
+		String message = Core.privateKillstreakMessage.replace("%NAME", p.getName()).replace("%COUNT", String.valueOf(currentAmount));
+		p.sendMessage(Core.PLPrefix + message);
+		if(currentAmount % Core.globalKillstreakDivider == 0){
+			String globalMessage = Core.globalKillstreakMessage.replace("%NAME", p.getName()).replace("%COUNT", String.valueOf(currentAmount));
+			Core.instance.getServer().broadcastMessage(Core.PLPrefix + globalMessage);
+		}
 	}
 	
 	public void remove(Player p, int amount){
@@ -32,6 +40,15 @@ public class KillStreakManager implements Listener {
 	}
 	
 	public void reset(Player p){
+		int current = get(p);
+		if(current > 0){
+			String message = Core.privateKillstreakEndMessage.replace("%NAME", p.getName()).replace("%COUNT", String.valueOf(current));
+			p.sendMessage(Core.PLPrefix + message);	
+			if(current >= Core.globalKillstreakDivider){
+				String globalMessage = Core.globalKillstreakEndMessage.replace("%NAME", p.getName()).replace("%COUNT", String.valueOf(current));
+				Core.instance.getServer().broadcastMessage(Core.PLPrefix + globalMessage);
+			}		
+		}
 		set(p, 0);
 	}
 	

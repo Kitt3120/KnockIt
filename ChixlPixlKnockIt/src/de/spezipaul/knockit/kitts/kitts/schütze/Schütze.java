@@ -1,4 +1,4 @@
-package de.spezipaul.knockit.kitts.kitts;
+package de.spezipaul.knockit.kitts.kitts.schütze;
 
 import java.util.HashMap;
 

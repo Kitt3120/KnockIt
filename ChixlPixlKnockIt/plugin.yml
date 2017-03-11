@@ -3,7 +3,7 @@ main: de.spezipaul.knockit.Core
 author: Kitt3120
 version: 1.0
 commands:
-  Kit:
+  kit:
     description: Kit main command
-    usage: /Kit
-    aliases: [kits, choose, choosekit, items, class]
+    usage: /kit
+    aliases: [kits, choose, choosekit, items, class, knockit]

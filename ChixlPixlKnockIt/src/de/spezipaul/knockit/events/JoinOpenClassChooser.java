@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import de.spezipaul.knockit.Core;
-import de.spezipaul.knockit.gui.inventories.ClassChooser;
+import de.spezipaul.knockit.gui.ClassChooser;
 
 public class JoinOpenClassChooser implements Listener{
 	
@@ -15,7 +15,11 @@ public class JoinOpenClassChooser implements Listener{
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
-		new ClassChooser(e.getPlayer());
+		Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
+			public void run() {
+				new ClassChooser(e.getPlayer());				
+			}
+		}, 20L);
 	}
 
 }

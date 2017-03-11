@@ -1,6 +1,7 @@
 package de.spezipaul.knockit.kitts;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +18,7 @@ public abstract class Kitt {
 		this.description = desc;
 		
 		setupItems();
+		setItems();
 	}
 
 	public abstract void setupItems();
@@ -26,6 +28,12 @@ public abstract class Kitt {
 	public HashMap<Integer, ItemStack> getItems() {
 		if(items == null) items = getItemHashmap();
 		return items;
+	}
+	
+	public void setItems(){
+		for(Entry<Integer, ItemStack> ent : getItems().entrySet()){
+			owner.getInventory().setItem(ent.getKey(), ent.getValue());
+		}
 	}
 
 	public Player getOwner() {
