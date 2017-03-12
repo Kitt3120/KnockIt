@@ -39,8 +39,8 @@ public class Schütze extends Kitt implements Listener {
 			public void run() {
 				if(!isEnabled()) return;
 				for(Arrow arrow : flyingArrows){
-					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0, 100);
-					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0, 100);
+					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0);
+					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0);
 				}
 			}
 		}, 1L, 1L);
@@ -84,7 +84,18 @@ public class Schütze extends Kitt implements Listener {
 	@EventHandler
 	public void onArrowHit(ProjectileHitEvent e){
 		if(!isEnabled()) return;
-		if(flyingArrows.contains(e.getEntity())) flyingArrows.remove(e.getEntity());
+		if(flyingArrows.contains(e.getEntity())) {
+			flyingArrows.remove(e.getEntity());
+			ParticleUtils.particleEffect(e.getEntity().getLocation(), Effect.CLOUD, 1, 1, 1, 1, 5);
+			Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
+				public void run() {
+					if(!e.getEntity().isDead()){
+						ParticleUtils.particleEffect(e.getEntity().getLocation(), Effect.SMOKE, 0, 0, 0, 0, 15);
+						e.getEntity().remove();						
+					}
+				}
+			}, 2*20L);
+		}
 	}
 
 }
