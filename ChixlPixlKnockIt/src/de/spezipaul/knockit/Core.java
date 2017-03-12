@@ -11,6 +11,7 @@ import de.spezipaul.knockit.events.FallDownEvent;
 import de.spezipaul.knockit.events.JoinAndQuitMessage;
 import de.spezipaul.knockit.events.JoinOpenClassChooser;
 import de.spezipaul.knockit.events.NoHunger;
+import de.spezipaul.knockit.events.NoItems;
 import de.spezipaul.knockit.gui.ClassChooser;
 import de.spezipaul.knockit.managers.KillStreakManager;
 import de.spezipaul.knockit.managers.KittsManager;
@@ -53,6 +54,7 @@ public class Core extends JavaPlugin {
 		new DamageHandler();
 		new JoinAndQuitMessage();
 		new NoHunger();
+		new NoItems();
 	}
 
 	@Override

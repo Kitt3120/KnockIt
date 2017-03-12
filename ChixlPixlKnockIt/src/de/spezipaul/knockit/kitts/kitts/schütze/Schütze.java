@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,6 +20,7 @@ import de.spezipaul.knockit.kitts.Kitt;
 import de.spezipaul.knockit.kitts.KittDescription;
 import de.spezipaul.knockit.objects.Enchant;
 import de.spezipaul.knockit.utils.ItemUtils;
+import de.spezipaul.knockit.utils.ParticleUtils;
 
 public class Schütze extends Kitt implements Listener {
 	
@@ -25,26 +28,34 @@ public class Schütze extends Kitt implements Listener {
 	private ItemStack bow;
 	private ItemStack arrow;
 	
-	private ArrayList<Integer> arrowBackTasks = new ArrayList<>();
 	private int arrowBackSeconds = 15;
+	private ArrayList<Arrow> flyingArrows = new ArrayList<>();
+	private int arrowParticleScheduler;
 
 	public Schütze(Player owner, KittDescription desc) {
 		super(owner, desc);
 		Core.instance.registerEvents(this);
+		arrowParticleScheduler = Core.instance.getServer().getScheduler().scheduleSyncRepeatingTask(Core.instance, new Runnable() {
+			public void run() {
+				if(!isEnabled()) return;
+				for(Arrow arrow : flyingArrows){
+					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0, 100);
+					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0, 100);
+				}
+			}
+		}, 1L, 1L);
 	}
 
 	@Override
 	public void setupItems() {
 		defaultStick = ItemUtils.stick();
-		bow = ItemUtils.create(Material.BOW, 1, "§cBogen", new String[]{"§cSupercooler Bogen"}, Arrays.asList(new Enchant(Enchantment.ARROW_KNOCKBACK, 1, true)));
+		bow = ItemUtils.create(Material.BOW, 1, "§cBogen", new String[]{"§cSupercooler Bogen"}, Arrays.asList(new Enchant(Enchantment.ARROW_KNOCKBACK, 2, true)));
 		arrow = ItemUtils.create(Material.ARROW, 4, "§cPfeil", new String[]{"§cKnallt nicht nur deine Alte weg"}, null);
 	}
 
 	@Override
 	public void stopSchedulers() {
-		for(int id : arrowBackTasks){
-			Core.instance.getServer().getScheduler().cancelTask(id);
-		}
+		Core.instance.getServer().getScheduler().cancelTask(arrowParticleScheduler);
 	}
 
 	@Override
@@ -58,22 +69,22 @@ public class Schütze extends Kitt implements Listener {
 	
 	@EventHandler
 	public void onArrow(ProjectileLaunchEvent e) {
+		if(!isEnabled()) return;
 		if(e.getEntity().getShooter().equals(getOwner()) && e.getEntity() instanceof Arrow) {
-			if(arrowBackTasks.size() < 4) {
-				int id = Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
-					public void run() {
-						getOwner().getInventory().addItem(ItemUtils.create(Material.ARROW, 1, "§cPfeil", new String[]{"§cKnallt nicht nur deine Alte weg"}, null));
-					}
-				}, arrowBackSeconds*20L);
-				Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
-					
-					@Override
-					public void run() {
-						arrowBackTasks.remove(id);
-					}
-				}, arrowBackSeconds*20L);
-			}
+			Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
+				public void run() {
+					if(!isEnabled() || getOwner().getInventory().contains(arrow)) return;
+					getOwner().getInventory().addItem(ItemUtils.create(Material.ARROW, 1, "§cPfeil", new String[]{"§cKnallt nicht nur deine Alte weg"}, null));
+				}
+			}, arrowBackSeconds*20L);
+			flyingArrows.add((Arrow) e.getEntity());
 		}
+	}
+	
+	@EventHandler
+	public void onArrowHit(ProjectileHitEvent e){
+		if(!isEnabled()) return;
+		if(flyingArrows.contains(e.getEntity())) flyingArrows.remove(e.getEntity());
 	}
 
 }

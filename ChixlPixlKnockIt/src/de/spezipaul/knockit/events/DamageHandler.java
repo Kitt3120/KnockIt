@@ -7,7 +7,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import de.spezipaul.knockit.Core;
@@ -43,11 +42,6 @@ public class DamageHandler implements Listener {
 			e.getDrops().clear();
 			Core.kittsManager.onDeath(e.getEntity());
 		}
-	}
-	
-	@EventHandler
-	public void onDropItems(PlayerDropItemEvent e){
-		e.setCancelled(true);
 	}
 	
 	@EventHandler
