@@ -41,7 +41,7 @@ public class Teleporter extends Kitt implements Listener {
 	}
 
 	@Override
-	public void stopSchedulers() {
+	public void stop() {
 		if(teleporterSchedulerActive) Core.instance.getServer().getScheduler().cancelTask(teleporterScheduler);
 	}
 
@@ -64,11 +64,8 @@ public class Teleporter extends Kitt implements Listener {
 	@EventHandler
 	public void onInteractItem(PlayerInteractEvent e){
 		if(!isEnabled()) return;
-		if(e.getPlayer().equals(getOwner()) && e.getItem() != null){
-			ItemStack item = e.getItem();
-			if(item.equals(teleporter)){
-				teleport();
-			}
+		if(e.getPlayer().equals(getOwner()) && e.getItem() != null && e.getItem().isSimilar(teleporter)){
+			teleport();
 		}
 	}
 	

@@ -1,11 +1,10 @@
 package de.spezipaul.knockit.kitts;
 
-import java.util.ArrayList;
-
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
+import de.spezipaul.knockit.utils.ItemUtils;
 
 public class KittDescription implements Listener {
 
@@ -13,22 +12,12 @@ public class KittDescription implements Listener {
 	private String name;
 	private String[] description;
 	private ItemStack GUIItem;
-	
+
 	public KittDescription(KittType type, String name, String[] description, Material GUIItemMaterial) {
 		this.kittType = type;
 		this.name = name;
 		this.description = description;
-		this.GUIItem = new ItemStack(GUIItemMaterial);
-		ItemMeta meta = this.GUIItem.getItemMeta();
-		meta.setDisplayName("§a" + name);
-		if(description != null){
-			ArrayList<String> lore = new ArrayList<>();
-			for(String line : description){
-				lore.add("§c" + line);
-			}
-			meta.setLore(lore);
-		}
-		this.GUIItem.setItemMeta(meta);
+		this.GUIItem = ItemUtils.create(GUIItemMaterial, 1, "§a" + name, description, null);
 	}
 	
 	public KittType getKittType() {

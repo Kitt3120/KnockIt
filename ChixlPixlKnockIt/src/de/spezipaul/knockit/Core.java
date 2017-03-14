@@ -1,5 +1,7 @@
 package de.spezipaul.knockit;
 
+import java.util.Map.Entry;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,8 +15,12 @@ import de.spezipaul.knockit.events.JoinOpenClassChooser;
 import de.spezipaul.knockit.events.NoHunger;
 import de.spezipaul.knockit.events.NoItems;
 import de.spezipaul.knockit.gui.ClassChooser;
+import de.spezipaul.knockit.kitts.Kitt;
+import de.spezipaul.knockit.kitts.kitts.creeper.Creeper;
+import de.spezipaul.knockit.kitts.kitts.creeper.CustomCreeper;
 import de.spezipaul.knockit.managers.KillStreakManager;
 import de.spezipaul.knockit.managers.KittsManager;
+import de.spezipaul.knockit.objects.Database;
 
 public class Core extends JavaPlugin {
 	
@@ -42,10 +48,29 @@ public class Core extends JavaPlugin {
 		initConfig();
 	}
 
+	@Override
+	public void onDisable() {
+		for(Player p : getServer().getOnlinePlayers()){
+			p.kickPlayer(PLPrefix + " " + kickMessage);
+		}
+		for(Entry<Player, Kitt> ent : kittsManager.getActiveKitts().entrySet()){
+			if(ent.getValue() instanceof Creeper){
+				for(CustomCreeper creeper : ((Creeper)ent.getValue()).getCustomCreepers()){
+					try {
+						((Creeper)ent.getValue()).removeCreeper(creeper);
+					} catch (Exception e) {
+						continue;
+					}
+				}
+			}
+		}
+	}
+
 	private void initiateManagers() {
 		instance = this;
 		kittsManager = new KittsManager(); //Lel easteregg
-		killstreakManager = new KillStreakManager();		
+		killstreakManager = new KillStreakManager();
+		new Database();
 	}
 	
 	private void registerEvents() {
@@ -55,13 +80,6 @@ public class Core extends JavaPlugin {
 		new JoinAndQuitMessage();
 		new NoHunger();
 		new NoItems();
-	}
-
-	@Override
-	public void onDisable() {
-		for(Player p : getServer().getOnlinePlayers()){
-			p.kickPlayer(PLPrefix + " " + kickMessage);
-		}
 	}
 	
 	private void initConfig() {

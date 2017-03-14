@@ -22,7 +22,7 @@ public abstract class Kitt {
 	}
 
 	public abstract void setupItems();
-	public abstract void stopSchedulers();
+	public abstract void stop();
 	protected abstract HashMap<Integer, ItemStack> getItemHashmap();
 	
 	public HashMap<Integer, ItemStack> getItems() {

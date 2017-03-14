@@ -11,9 +11,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import de.spezipaul.knockit.Core;
-import de.spezipaul.knockit.exceptions.NoKittException;
-import de.spezipaul.knockit.kitts.Kitt;
-import de.spezipaul.knockit.kitts.KittDescription;
 
 public class DamageHandler implements Listener {
 	
@@ -64,11 +61,7 @@ public class DamageHandler implements Listener {
 	
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent e){
-		try {
-			Kitt playerKitt = Core.kittsManager.getKitt(e.getPlayer());
-			KittDescription desc = playerKitt.getDescription();
-			playerKitt = Core.kittsManager.create(e.getPlayer(), desc);
-		} catch (NoKittException e1) {}
+		Core.kittsManager.resetKitt(e.getPlayer());
 	}
 
 }

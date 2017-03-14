@@ -1,4 +1,4 @@
-package de.spezipaul.knockit.kitts.kitts.schütze;
+package de.spezipaul.knockit.kitts.kitts.sniper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import de.spezipaul.knockit.kitts.KittDescription;
 import de.spezipaul.knockit.utils.ItemUtils;
 import de.spezipaul.knockit.utils.ParticleUtils;
 
-public class Schütze extends Kitt implements Listener {
+public class Sniper extends Kitt implements Listener {
 	
 	private ItemStack defaultStick;
 	private ItemStack bow;
@@ -29,14 +29,14 @@ public class Schütze extends Kitt implements Listener {
 	private ArrayList<Arrow> flyingArrows = new ArrayList<>();
 	private int arrowParticleScheduler;
 
-	public Schütze(Player owner, KittDescription desc) {
+	public Sniper(Player owner, KittDescription desc) {
 		super(owner, desc);
 		Core.instance.registerEvents(this);
 		arrowParticleScheduler = Core.instance.getServer().getScheduler().scheduleSyncRepeatingTask(Core.instance, new Runnable() {
 			public void run() {
 				if(!isEnabled()) return;
 				for(Arrow arrow : flyingArrows){
-					ParticleUtils.particleEffect(arrow.getLocation(), Effect.CLOUD, 0, 0, 0, 0, 0);
+					ParticleUtils.particleEffect(arrow.getLocation(), Effect.COLOURED_DUST, 0, 0, 0, 0, 0);
 				}
 			}
 		}, 1L, 1L);
@@ -45,8 +45,8 @@ public class Schütze extends Kitt implements Listener {
 	@Override
 	public void setupItems() {
 		defaultStick = ItemUtils.stick();
-		bow = ItemUtils.create(Material.BOW, 1, "§cBogen", new String[]{"§cSupercooler Bogen"}, null);
-		arrow = ItemUtils.create(Material.ARROW, 4, "§cPfeil", new String[]{"§cKnallt nicht nur deine Alte weg"}, null);
+		bow = ItemUtils.create(Material.BOW, 1, "§cBogen", new String[]{"§cSpeed-Bogen"}, null);
+		arrow = ItemUtils.create(Material.ARROW, 2, "§cPfeil", new String[]{"§cFliegt schneller als der Schall"}, null);
 	}
 
 	@Override
@@ -70,10 +70,11 @@ public class Schütze extends Kitt implements Listener {
 			Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
 				public void run() {
 					if(!isEnabled() || getOwner().getInventory().contains(arrow)) return;
-					getOwner().getInventory().addItem(ItemUtils.create(Material.ARROW, 1, "§cPfeil", new String[]{"§cKnallt nicht nur deine Alte weg"}, null));
+					getOwner().getInventory().addItem(ItemUtils.create(Material.ARROW, 1, "§cPfeil", new String[]{"§cFliegt schneller als der Schall"}, null));
 				}
 			}, arrowBackSeconds*20L);
-			((Arrow)e.getEntity()).setKnockbackStrength(1);
+			((Arrow)e.getEntity()).setVelocity(e.getEntity().getVelocity().multiply(1.5));
+			((Arrow)e.getEntity()).setKnockbackStrength(0);
 			flyingArrows.add((Arrow) e.getEntity());
 		}
 	}
@@ -83,11 +84,11 @@ public class Schütze extends Kitt implements Listener {
 		if(!isEnabled()) return;
 		if(flyingArrows.contains(e.getEntity())) {
 			flyingArrows.remove(e.getEntity());
-			ParticleUtils.particleEffect(e.getEntity().getLocation(), Effect.CLOUD, 1, 1, 1, 1, 5);
+			ParticleUtils.particleEffect(e.getEntity().getLocation(), Effect.COLOURED_DUST, 1, 1, 1, 1, 5);
 			Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {
 				public void run() {
 					if(!e.getEntity().isDead()){
-						ParticleUtils.particleEffect(e.getEntity().getLocation(), Effect.SMOKE, 0, 0, 0, 0, 15);
+						ParticleUtils.particleEffect(e.getEntity().getLocation(), Effect.COLOURED_DUST, 0, 0, 0, 0, 15);
 						e.getEntity().remove();						
 					}
 				}

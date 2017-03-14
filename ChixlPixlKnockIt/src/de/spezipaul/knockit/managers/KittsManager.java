@@ -14,7 +14,9 @@ import de.spezipaul.knockit.exceptions.NoLastDamagerException;
 import de.spezipaul.knockit.kitts.Kitt;
 import de.spezipaul.knockit.kitts.KittDescription;
 import de.spezipaul.knockit.kitts.KittType;
+import de.spezipaul.knockit.kitts.kitts.creeper.Creeper;
 import de.spezipaul.knockit.kitts.kitts.schütze.Schütze;
+import de.spezipaul.knockit.kitts.kitts.sniper.Sniper;
 import de.spezipaul.knockit.kitts.kitts.teleporter.Teleporter;
 
 public class KittsManager {
@@ -26,7 +28,9 @@ public class KittsManager {
 	
 	public KittsManager() {
 		availableKitts.add(new KittDescription(KittType.Teleporter, "Teleporter", new String[]{"Kann sich zurück teleportieren"}, Material.BLAZE_ROD));
-		availableKitts.add(new KittDescription(KittType.Schütze, "Schütze", new String[]{"Hat 4 Pfeile und einen starken Bogen"}, Material.BOW));
+		availableKitts.add(new KittDescription(KittType.Schütze, "Schütze", new String[]{"Munition: 4", "Schießt schwere Pfeile, die einen größeren Rückstoß garantieren"}, Material.BOW));
+		availableKitts.add(new KittDescription(KittType.Sniper, "Sniper", new String[]{"Munition: 2", "Schießt sehr leichte Pfeile, die dafür schneller fliegen"}, Material.ARROW));
+		availableKitts.add(new KittDescription(KittType.Creeper, "Creeper", new String[]{"Kann verbündete Creeper spawnen"}, Material.TNT));
 	}
 	
 	public void register(KittDescription desc){
@@ -53,6 +57,14 @@ public class KittsManager {
 			Schütze schütze = new Schütze(owner, desc);
 			setPlayer(owner, schütze);
 			return schütze;
+		case Sniper:
+			Sniper sniper = new Sniper(owner, desc);
+			setPlayer(owner, sniper);
+			return sniper;
+		case Creeper:
+			Creeper creeper = new Creeper(owner, desc);
+			setPlayer(owner, creeper);
+			return creeper;
 		default:
 			return null;
 		}
@@ -89,7 +101,7 @@ public class KittsManager {
 	
 	public void removePlayer(Player player){
 		try {
-			getKitt(player).stopSchedulers();
+			getKitt(player).stop();
 			getKitt(player).setEnabled(false);			
 		} catch (NoKittException e) {}
 		player.getInventory().clear();
@@ -104,22 +116,39 @@ public class KittsManager {
 		return players;
 	}
 
+	public HashMap<Player, Kitt> getActiveKitts() {
+		return activeKitts;
+	}
+	
+	public void resetKitt(Player p){		
+		try {
+			Kitt playerKitt = Core.kittsManager.getKitt(p);
+			playerKitt.stop();
+			playerKitt.setEnabled(false);
+			KittDescription desc = playerKitt.getDescription();
+			playerKitt = Core.kittsManager.create(p, desc);
+		} catch (NoKittException e1) {}
+	}
+
 	public void onFall(Player p) {
 		p.setFallDistance(0);
 		p.teleport(p.getLocation().getWorld().getSpawnLocation());
 		p.setHealth(p.getMaxHealth());
+		p.setFireTicks(0);
 		try {
 			Player lastDamager = getLastDamager(p);
 			Core.killstreakManager.add(lastDamager, 1);
 			removeLastDamager(p);
 		} catch (NoLastDamagerException e) {}
 		Core.killstreakManager.reset(p);
+		resetKitt(p);
+		
 	}
 	
 	public void onDeath(Player p){
 		Core.killstreakManager.reset(p);
 		try {
-			Core.kittsManager.getKitt(p).stopSchedulers();
+			Core.kittsManager.getKitt(p).stop();
 			Core.kittsManager.getKitt(p).setEnabled(false);
 		} catch (NoKittException e) {}
 	}
@@ -128,7 +157,7 @@ public class KittsManager {
 		Core.killstreakManager.add(killer, 1);
 		Core.killstreakManager.reset(p);
 		try {
-			Core.kittsManager.getKitt(p).stopSchedulers();
+			Core.kittsManager.getKitt(p).stop();
 			Core.kittsManager.getKitt(p).setEnabled(false);
 		} catch (NoKittException e) {}
 	}
