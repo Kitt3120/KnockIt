@@ -25,10 +25,10 @@ public class CustomCreeper implements Listener {
 	private org.bukkit.entity.Creeper creeper;
 	private int targetScheduler;
 	
-	private float speed = 1.5F;
-	private float speedTarget = 1.6F;
-	private int rangeToTarget = 12;
-	private int followRange = 3;
+	private float speed = 1.6F;
+	private float speedTarget = 1.7F;
+	private int rangeToTarget = 15;
+	private int followRange = 5;
 	private int followTeleport = 12;
 	
 	public CustomCreeper(Player owner, Location loc, Creeper creeperKitt) {
@@ -37,6 +37,8 @@ public class CustomCreeper implements Listener {
 		this.spawnLocation = loc;
 		this.creeperKitt = creeperKitt;
 		creeper = loc.getWorld().spawn(loc, org.bukkit.entity.Creeper.class);
+		creeper.setCustomName("§a" + getOwner().getName() + "'s Creeper");
+		creeper.setCustomNameVisible(true);
 		targetScheduler = Core.instance.getServer().getScheduler().scheduleSyncRepeatingTask(Core.instance, new Runnable() {
 			public void run() {
 				try {
@@ -48,7 +50,7 @@ public class CustomCreeper implements Listener {
 								getCreeper().teleport(getOwner());
 							}
 						}
-						List<Entity> nearbyEntities = getCreeper().getNearbyEntities(12, 12, 12);
+						List<Entity> nearbyEntities = getCreeper().getNearbyEntities(rangeToTarget, rangeToTarget, rangeToTarget);
 						ArrayList<Entity> possibleTargets = new ArrayList<>();
 						for(Entity ent : nearbyEntities){
 							if(ent instanceof Player && !ent.equals(getOwner())) possibleTargets.add(ent);

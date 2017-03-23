@@ -50,28 +50,33 @@ public class KittsManager {
 	
 	public Kitt create(Player owner, KittDescription desc){ 
 		if(hasKitt(owner)) removePlayer(owner);
-		switch (desc.getKittType()) {
-		case Teleporter:
-			Teleporter teleporter = new Teleporter(owner, desc);
-			setPlayer(owner, teleporter);
-			return teleporter;
-		case Schütze:
-			Schütze schütze = new Schütze(owner, desc);
-			setPlayer(owner, schütze);
-			return schütze;
-		case Sniper:
-			Sniper sniper = new Sniper(owner, desc);
-			setPlayer(owner, sniper);
-			return sniper;
-		case Creeper:
-			Creeper creeper = new Creeper(owner, desc);
-			setPlayer(owner, creeper);
-			return creeper;
-		case Chemiker:
-			Chemiker chemiker = new Chemiker(owner, desc);
-			setPlayer(owner, chemiker);
-			return chemiker;
-		default:
+		try {
+			switch (desc.getKittType()) {
+			case Teleporter:
+				Teleporter teleporter = new Teleporter(owner, desc);
+				setPlayer(owner, teleporter);
+				return teleporter;
+			case Schütze:
+				Schütze schütze = new Schütze(owner, desc);
+				setPlayer(owner, schütze);
+				return schütze;
+			case Sniper:
+				Sniper sniper = new Sniper(owner, desc);
+				setPlayer(owner, sniper);
+				return sniper;
+			case Creeper:
+				Creeper creeper = new Creeper(owner, desc);
+				setPlayer(owner, creeper);
+				return creeper;
+			case Chemiker:
+				Chemiker chemiker = new Chemiker(owner, desc);
+				setPlayer(owner, chemiker);
+				return chemiker;
+			default:
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); //Just in case something happens
 			return null;
 		}
 	}

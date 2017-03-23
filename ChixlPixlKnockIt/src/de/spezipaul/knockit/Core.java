@@ -28,8 +28,8 @@ public class Core extends JavaPlugin {
 	public static String PLPrefix = "§8[§cKnockIt§8] §3";
 
 	public static String kickMessage = "Der Server startet neu. Bitte versuche, erneut beizutreten.";
-	public static String joinMessage = "%NAME ist dem Spiel beigetreten.";
-	public static String leaveMessage = "%NAME hat das Spiel verlassen.";
+	public static String joinMessage = "&a%NAME ist dem Spiel beigetreten.";
+	public static String leaveMessage = "&4%NAME hat das Spiel verlassen.";
 	public static String privateKillstreakMessage = "Du bist auf einer %COUNT-er Killstreak.";
 	public static String privateKillstreakEndMessage = "Deine %COUNT-er Killstreak wurde beendet.";
 	public static String globalKillstreakMessage = "%NAME ist auf einer %COUNT-er Killstreak.";
@@ -50,19 +50,18 @@ public class Core extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		for(Player p : getServer().getOnlinePlayers()){
-			p.kickPlayer(PLPrefix + " " + kickMessage);
-		}
 		for(Entry<Player, Kitt> ent : kittsManager.getActiveKitts().entrySet()){
 			if(ent.getValue() instanceof Creeper){
-				for(CustomCreeper creeper : ((Creeper)ent.getValue()).getCustomCreepers()){
-					try {
-						((Creeper)ent.getValue()).removeCreeper(creeper);
-					} catch (Exception e) {
-						continue;
-					}
+				Creeper kitt = (Creeper) ent.getValue();
+				for(int i = 0; i < kitt.getCustomCreepers().size(); i++){
+					CustomCreeper creeper = kitt.getCustomCreepers().get(i);
+					creeper.die(false);
 				}
 			}
+		}
+		
+		for(Player p : getServer().getOnlinePlayers()){
+			p.kickPlayer(PLPrefix + " " + kickMessage);
 		}
 	}
 
