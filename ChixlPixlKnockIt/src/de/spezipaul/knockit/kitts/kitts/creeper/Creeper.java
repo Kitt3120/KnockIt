@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import de.spezipaul.knockit.Core;
@@ -66,14 +65,13 @@ public class Creeper extends Kitt implements Listener {
 		if(!isEnabled()) return;
 		if(e.getPlayer().equals(getOwner()) && e.getClickedBlock() != null && e.getItem() != null && e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getItem().isSimilar(creeperEggs)) {
 			e.setCancelled(true);
-			ItemStack eggs = getOwner().getInventory().getItemInMainHand();
+			ItemStack eggs = getOwner().getInventory().getItemInHand();
 			int amount = eggs.getAmount() - 1;
 			if(amount <= 0) {
 				e.getPlayer().getInventory().remove(eggs);
 			} else {
 				eggs.setAmount(amount);
-				if(e.getHand().equals(EquipmentSlot.HAND)) e.getPlayer().getInventory().setItemInMainHand(eggs);
-				if(e.getHand().equals(EquipmentSlot.OFF_HAND)) e.getPlayer().getInventory().setItemInOffHand(eggs);
+				e.getPlayer().setItemInHand(eggs);
 			}
 			placeCreeper(e.getClickedBlock().getLocation().add(0, 1, 0));
 			Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {

@@ -3,11 +3,11 @@ package de.spezipaul.knockit.utils;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-import net.minecraft.server.v1_9_R1.EntityInsentient;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
 
 public class EntityUtils {
 	

@@ -3,7 +3,6 @@ package de.spezipaul.knockit.events;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import de.spezipaul.knockit.Core;
@@ -21,11 +20,6 @@ public class NoItems implements Listener {
 	
 	@EventHandler
 	public void onPickupItem(PlayerPickupItemEvent e){
-		e.setCancelled(true);
-	}
-	
-	@EventHandler
-	public void onPickupArrow(PlayerPickupArrowEvent e){
 		e.setCancelled(true);
 	}
 

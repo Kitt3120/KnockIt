@@ -33,7 +33,7 @@ public class ClassChooser implements Listener {
 			inv.addItem(item);
 		}
 		p.openInventory(inv);
-		p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 1, 1);
+		p.playSound(p.getLocation(), Sound.CHEST_OPEN, 1, 1);
 		Core.instance.registerEvents(this);
 	}
 	
@@ -44,7 +44,7 @@ public class ClassChooser implements Listener {
 			hasSelected = true;
 			createKitt(descriptions.get(e.getCurrentItem()));
 			owner.closeInventory();
-			owner.playSound(owner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
+			owner.playSound(owner.getLocation(), Sound.LEVEL_UP, 1, 10);
 		}
 	}
 	

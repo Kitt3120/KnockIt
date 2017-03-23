@@ -71,10 +71,10 @@ public class Teleporter extends Kitt implements Listener {
 	
 	private void teleport(){
 		if(lastGroundLocation != null){
-			getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
+			getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1);
 			getOwner().teleport(lastGroundLocation);
 			getOwner().setFallDistance(0F);
-			getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1, 1);
+			getOwner().getWorld().playSound(getOwner().getLocation(), Sound.ENDERMAN_TELEPORT, 1, 1);
 			getOwner().getInventory().removeItem(teleporter);
 			teleporterSchedulerActive = true;
 			teleporterScheduler = Core.instance.getServer().getScheduler().scheduleSyncDelayedTask(Core.instance, new Runnable() {

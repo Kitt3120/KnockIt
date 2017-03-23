@@ -37,7 +37,6 @@ public class CustomCreeper implements Listener {
 		this.spawnLocation = loc;
 		this.creeperKitt = creeperKitt;
 		creeper = loc.getWorld().spawn(loc, org.bukkit.entity.Creeper.class);
-		creeper.setCollidable(false);
 		targetScheduler = Core.instance.getServer().getScheduler().scheduleSyncRepeatingTask(Core.instance, new Runnable() {
 			public void run() {
 				try {
