@@ -14,6 +14,7 @@ import de.spezipaul.knockit.exceptions.NoLastDamagerException;
 import de.spezipaul.knockit.kitts.Kitt;
 import de.spezipaul.knockit.kitts.KittDescription;
 import de.spezipaul.knockit.kitts.KittType;
+import de.spezipaul.knockit.kitts.kitts.chemiker.Chemiker;
 import de.spezipaul.knockit.kitts.kitts.creeper.Creeper;
 import de.spezipaul.knockit.kitts.kitts.schütze.Schütze;
 import de.spezipaul.knockit.kitts.kitts.sniper.Sniper;
@@ -31,6 +32,7 @@ public class KittsManager {
 		availableKitts.add(new KittDescription(KittType.Schütze, "Schütze", new String[]{"Munition: 4", "Schießt schwere Pfeile, die einen größeren Rückstoß garantieren"}, Material.BOW));
 		availableKitts.add(new KittDescription(KittType.Sniper, "Sniper", new String[]{"Munition: 2", "Schießt sehr leichte Pfeile, die dafür schneller fliegen"}, Material.ARROW));
 		availableKitts.add(new KittDescription(KittType.Creeper, "Creeper", new String[]{"Kann verbündete Creeper spawnen"}, Material.TNT));
+		availableKitts.add(new KittDescription(KittType.Chemiker, "Chemiker", new String[]{"Kann seine Gegner verlangsamen"}, Material.POTION));
 	}
 	
 	public void register(KittDescription desc){
@@ -65,6 +67,10 @@ public class KittsManager {
 			Creeper creeper = new Creeper(owner, desc);
 			setPlayer(owner, creeper);
 			return creeper;
+		case Chemiker:
+			Chemiker chemiker = new Chemiker(owner, desc);
+			setPlayer(owner, chemiker);
+			return chemiker;
 		default:
 			return null;
 		}
