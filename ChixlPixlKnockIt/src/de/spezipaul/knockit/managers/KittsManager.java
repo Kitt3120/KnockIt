@@ -18,6 +18,7 @@ import de.spezipaul.knockit.kitts.kitts.chemiker.Chemiker;
 import de.spezipaul.knockit.kitts.kitts.creeper.Creeper;
 import de.spezipaul.knockit.kitts.kitts.schütze.Schütze;
 import de.spezipaul.knockit.kitts.kitts.sniper.Sniper;
+import de.spezipaul.knockit.kitts.kitts.specials.kitt3120.Kitt3120;
 import de.spezipaul.knockit.kitts.kitts.teleporter.Teleporter;
 
 public class KittsManager {
@@ -72,6 +73,10 @@ public class KittsManager {
 				Chemiker chemiker = new Chemiker(owner, desc);
 				setPlayer(owner, chemiker);
 				return chemiker;
+			case Kitt3120:
+				Kitt3120 kitt3120 = new Kitt3120(owner, desc);
+				setPlayer(owner, kitt3120);
+				return kitt3120;
 			default:
 				return null;
 			}

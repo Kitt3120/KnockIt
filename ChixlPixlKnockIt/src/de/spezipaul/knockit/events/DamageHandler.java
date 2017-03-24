@@ -2,6 +2,7 @@ package de.spezipaul.knockit.events;
 
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -30,10 +31,10 @@ public class DamageHandler implements Listener {
 				Core.kittsManager.setLastDamager((Player) e.getEntity(), (Player) e.getDamager());
 				e.setDamage(0);				
 			}
-			if(e.getDamager() instanceof Arrow) {
-				Arrow arrow = (Arrow) e.getDamager();
-				if(arrow.getShooter() instanceof Player) {
-					Core.kittsManager.setLastDamager((Player) e.getEntity(), (Player) arrow.getShooter());
+			if(e.getDamager() instanceof Projectile) {
+				Projectile projectile = (Projectile) e.getDamager();
+				if(projectile.getShooter() instanceof Player) {
+					Core.kittsManager.setLastDamager((Player) e.getEntity(), (Player) projectile.getShooter());
 					e.setDamage(0);
 				}
 			}

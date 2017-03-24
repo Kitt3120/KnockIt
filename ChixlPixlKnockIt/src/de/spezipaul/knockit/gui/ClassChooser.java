@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.spezipaul.knockit.Core;
 import de.spezipaul.knockit.kitts.KittDescription;
+import de.spezipaul.knockit.kitts.kitts.specials.SpecialPlayers;
 
 public class ClassChooser implements Listener {
 	
@@ -32,11 +33,14 @@ public class ClassChooser implements Listener {
 			descriptions.put(item, desc);
 			inv.addItem(item);
 		}
+		
+		SpecialPlayers.addSpecial(p.getName(), descriptions, inv);
+		
 		p.openInventory(inv);
 		p.playSound(p.getLocation(), Sound.CHEST_OPEN, 1, 1);
 		Core.instance.registerEvents(this);
 	}
-	
+
 	@EventHandler
 	public void onSelectKit(InventoryClickEvent e){
 		if(e.getInventory().equals(inv) && e.getWhoClicked().equals(owner) && e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR) && !hasSelected){

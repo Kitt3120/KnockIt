@@ -78,22 +78,6 @@ public class CustomCreeper implements Listener {
 		if(removeFromList) creeperKitt.removeCreeper(this);
 	}
 	
-	public Player getOwner() {
-		return owner;
-	}
-	
-	public Location getSpawnLocation() {
-		return spawnLocation;
-	}
-	
-	public Creeper getCreeperKitt() {
-		return creeperKitt;
-	}
-	
-	public org.bukkit.entity.Creeper getCreeper() {
-		return creeper;
-	}
-	
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if(!getCreeperKitt().isEnabled()) return;
@@ -117,17 +101,17 @@ public class CustomCreeper implements Listener {
 	
 	@EventHandler
 	public void onTarget(EntityTargetEvent e){
-		if(!getCreeperKitt().isEnabled()) return;
-		if(e.getEntity().equals(getCreeper())) {
-			if(!(e.getTarget() instanceof Player) || e.getTarget().equals(getOwner())) e.setCancelled(true);
+		if(!getCreeperKitt().isEnabled() || !e.getEntity().equals(getCreeper())) return;
+		if(e.getTarget() != null && (!(e.getTarget() instanceof Player) || e.getTarget().equals(owner))) {
+			e.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
 	public void onTargetLivingEntity(EntityTargetLivingEntityEvent e){
-		if(!getCreeperKitt().isEnabled()) return;
-		if(e.getTarget() != null && !(e.getTarget() instanceof Player) || e.getEntity().equals(getCreeper())) {
-			if(e.getTarget().equals(getOwner())) e.setCancelled(true);
+		if(!getCreeperKitt().isEnabled() || !e.getEntity().equals(getCreeper())) return;
+		if(e.getTarget() != null) {
+			if(!(e.getTarget() instanceof Player) || e.getTarget().equals(getOwner())) e.setCancelled(true);
 		}
 	}
 	
@@ -137,6 +121,22 @@ public class CustomCreeper implements Listener {
 		if(e.getEntity().equals(getOwner()) && e.getDamager() instanceof Player) {
 			getCreeper().setTarget((LivingEntity) e.getDamager());
 		}
+	}
+	
+	public Player getOwner() {
+		return owner;
+	}
+	
+	public Location getSpawnLocation() {
+		return spawnLocation;
+	}
+	
+	public Creeper getCreeperKitt() {
+		return creeperKitt;
+	}
+	
+	public org.bukkit.entity.Creeper getCreeper() {
+		return creeper;
 	}
 
 }

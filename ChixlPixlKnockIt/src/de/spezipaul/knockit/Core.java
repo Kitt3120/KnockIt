@@ -16,8 +16,6 @@ import de.spezipaul.knockit.events.NoHunger;
 import de.spezipaul.knockit.events.NoItems;
 import de.spezipaul.knockit.gui.ClassChooser;
 import de.spezipaul.knockit.kitts.Kitt;
-import de.spezipaul.knockit.kitts.kitts.creeper.Creeper;
-import de.spezipaul.knockit.kitts.kitts.creeper.CustomCreeper;
 import de.spezipaul.knockit.managers.KillStreakManager;
 import de.spezipaul.knockit.managers.KittsManager;
 import de.spezipaul.knockit.objects.Database;
@@ -51,13 +49,7 @@ public class Core extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		for(Entry<Player, Kitt> ent : kittsManager.getActiveKitts().entrySet()){
-			if(ent.getValue() instanceof Creeper){
-				Creeper kitt = (Creeper) ent.getValue();
-				for(int i = 0; i < kitt.getCustomCreepers().size(); i++){
-					CustomCreeper creeper = kitt.getCustomCreepers().get(i);
-					creeper.die(false);
-				}
-			}
+			ent.getValue().stop();
 		}
 		
 		for(Player p : getServer().getOnlinePlayers()){

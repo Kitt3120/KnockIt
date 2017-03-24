@@ -2,6 +2,6 @@ package de.spezipaul.knockit.kitts;
 
 public enum KittType {
 	
-	Teleporter, Schütze, Sniper, Creeper, Chemiker;
+	Teleporter, Schütze, Sniper, Creeper, Chemiker, Kitt3120;
 
 }
